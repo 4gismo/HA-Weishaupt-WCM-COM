@@ -1,5 +1,11 @@
 {
   "name": "Weishaupt WCM-COM HA Module",
+  "content_in_root": false,
+  "domains": ["sensor"],
   "country": "global",
-  "render_readme": true
+  "homeassistant": "2023.0.0",
+  "render_readme": true,
+  "zip_release": false,
+  "filename": "weishaupt_wcm_com",
+  "iot_class": "local_polling"
 }
