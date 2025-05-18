@@ -1,4 +1,5 @@
 {
   "name": "Weishaupt WCM-COM HA Module",
+  "country": "global",
   "render_readme": true
 }

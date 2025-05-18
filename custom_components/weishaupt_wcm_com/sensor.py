@@ -1,5 +1,5 @@
 """Platform for sensor integration."""
-from homeassistant.const import TEMP_CELSIUS
+from homeassistant.const import UnitOfTemperature
 from homeassistant.helpers.entity import Entity
 import logging
 from datetime import timedelta, datetime
