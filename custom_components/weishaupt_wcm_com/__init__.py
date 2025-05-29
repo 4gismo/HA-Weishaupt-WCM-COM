@@ -1,4 +1,4 @@
-"""Weishaupt WCM-COM"""
+"""Weishaupt WCM-COM Integration."""
 
 import logging
 from homeassistant.config_entries import ConfigEntry
@@ -26,9 +26,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     api = WeishauptAPI(conf[CONF_HOST], conf[CONF_USERNAME], conf[CONF_PASSWORD])
     hass.data[DOMAIN] = api
 
-    hass.async_create_task(
-        async_load_platform(hass, "sensor", DOMAIN, {}, config)
-    )
+    await async_load_platform(hass, "sensor", DOMAIN, {}, config)
     return True
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -36,9 +34,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     api = WeishauptAPI(entry.data[CONF_HOST], entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
     hass.data[DOMAIN] = api
 
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor")
-    )
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

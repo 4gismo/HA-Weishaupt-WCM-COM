@@ -1,6 +1,6 @@
 """Platform for sensor integration."""
 from homeassistant.const import UnitOfTemperature
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
 import logging
 from datetime import timedelta, datetime
 
@@ -35,7 +35,6 @@ _LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    # We only want this platform to be set up via discovery.
     if discovery_info is None:
         return
     add_entities(_build_entities(hass, config))
@@ -65,8 +64,7 @@ def _build_entities(hass, config):
         WeishauptSensor(hass, config, HEATING_KEY, ""),
     ]
 
-
-class WeishauptSensor(WeishauptBaseEntity):
+class WeishauptSensor(WeishauptBaseEntity, SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, hass, config, sensor_name, sensor_unit):
@@ -93,15 +91,11 @@ class WeishauptSensor(WeishauptBaseEntity):
         """Return the unit of measurement."""
         return self._unit
 
-    def update(self):
-        """Fetch new state data for the sensor.
-
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        _LOGGER.debug("Updating Sensor")
-        super().update()
-        try: 
+    async def async_update(self):
+        _LOGGER.debug(f"[async_update] Updating sensor: {self._name}")
+        await self.hass.async_add_executor_job(super().update)
+        try:
             self._state = self.api().getData().get(self._name)
         except Exception as e:
-            _LOGGER.warning(f"Failed to update sensor {self._name}: {e}")
+            _LOGGER.warning(f"[async_update] Failed to update sensor {self._name}: {e}")
             self._state = None
