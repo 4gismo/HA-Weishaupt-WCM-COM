@@ -1,7 +1,7 @@
-git{
+{
   "domain": "weishaupt_wcm_com",
   "name": "Weishaupt WCM-COM (forked by 4gismo)",
-  "version": "1.5.0",
+  "version": "1.5.4",
   "documentation": "https://github.com/4gismo/HA-Weishaupt-WCM-COM",
   "issue_tracker": "https://github.com/4gismo/HA-Weishaupt-WCM-COM/issues",
   "dependencies": [],
