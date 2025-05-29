@@ -4,6 +4,10 @@ from homeassistant.helpers.entity import Entity
 import logging
 from datetime import timedelta, datetime
 
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+
 from .const import DOMAIN
 from .const import NAME_PREFIX
 
@@ -27,12 +31,6 @@ from .const import HEATING_KEY
 
 from . import WeishauptBaseEntity
 
-
-
-SENSOR_TYPES = {
-    "oil_meter"
-}
-
 _LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -40,27 +38,32 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     # We only want this platform to be set up via discovery.
     if discovery_info is None:
         return
-    add_entities(
-        [
-            WeishauptSensor(hass, config, OIL_CONSUMPTION_KEY, "l"),
-            WeishauptSensor(hass, config, OUTSIDE_TEMPERATURE_KEY, "°C"),
-            WeishauptSensor(hass, config, LOAD_SETTING_KEY, "kW"),
-            WeishauptSensor(hass, config, WARM_WATER_TEMPERATURE_KEY, "°C"),
-            WeishauptSensor(hass, config, FLOW_TEMPERATURE_KEY, "°C"),
-            WeishauptSensor(hass, config, FLUE_GAS_TEMPERATURE_KEY, "°C"),
-            WeishauptSensor(hass, config, ROOM_TEMPERATURE_KEY, "°C"),
-            WeishauptSensor(hass, config, MIXED_EXTERNAL_TEMPERATURE_KEY, "°C"),
-            WeishauptSensor(hass, config, OPERATING_MODE_KEY, ""),
-            WeishauptSensor(hass, config, OPERATING_PHASE_KEY, ""),
-            WeishauptSensor(hass, config, PUMP_KEY, ""),
-            WeishauptSensor(hass, config, WARM_WATER_KEY, ""),
-            WeishauptSensor(hass, config, FLAME_KEY, ""),
-            WeishauptSensor(hass, config, ERROR_KEY, ""),
-            WeishauptSensor(hass, config, GAS_VALVE_1_KEY, ""),
-            WeishauptSensor(hass, config, GAS_VALVE_2_KEY, ""),
-            WeishauptSensor(hass, config, HEATING_KEY, ""),
-        ]
-    )
+    add_entities(_build_entities(hass, config))
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
+    """Set up the sensor platform via config entry (UI)."""
+    async_add_entities(_build_entities(hass, {}))
+
+def _build_entities(hass, config):
+    return [
+        WeishauptSensor(hass, config, OIL_CONSUMPTION_KEY, "l"),
+        WeishauptSensor(hass, config, OUTSIDE_TEMPERATURE_KEY, "°C"),
+        WeishauptSensor(hass, config, LOAD_SETTING_KEY, "kW"),
+        WeishauptSensor(hass, config, WARM_WATER_TEMPERATURE_KEY, "°C"),
+        WeishauptSensor(hass, config, FLOW_TEMPERATURE_KEY, "°C"),
+        WeishauptSensor(hass, config, FLUE_GAS_TEMPERATURE_KEY, "°C"),
+        WeishauptSensor(hass, config, ROOM_TEMPERATURE_KEY, "°C"),
+        WeishauptSensor(hass, config, MIXED_EXTERNAL_TEMPERATURE_KEY, "°C"),
+        WeishauptSensor(hass, config, OPERATING_MODE_KEY, ""),
+        WeishauptSensor(hass, config, OPERATING_PHASE_KEY, ""),
+        WeishauptSensor(hass, config, PUMP_KEY, ""),
+        WeishauptSensor(hass, config, WARM_WATER_KEY, ""),
+        WeishauptSensor(hass, config, FLAME_KEY, ""),
+        WeishauptSensor(hass, config, ERROR_KEY, ""),
+        WeishauptSensor(hass, config, GAS_VALVE_1_KEY, ""),
+        WeishauptSensor(hass, config, GAS_VALVE_2_KEY, ""),
+        WeishauptSensor(hass, config, HEATING_KEY, ""),
+    ]
 
 
 class WeishauptSensor(WeishauptBaseEntity):
@@ -72,7 +75,6 @@ class WeishauptSensor(WeishauptBaseEntity):
         self._state = None
         self._data = {}
         self._config = config
-
         self._name = sensor_name
         self._unit = sensor_unit
 
@@ -99,6 +101,7 @@ class WeishauptSensor(WeishauptBaseEntity):
         _LOGGER.debug("Updating Sensor")
         super().update()
         try: 
-            self._state = self.api().getData()[self._name]
-        except:
+            self._state = self.api().getData().get(self._name)
+        except Exception as e:
+            _LOGGER.warning(f"Failed to update sensor {self._name}: {e}")
             self._state = None
