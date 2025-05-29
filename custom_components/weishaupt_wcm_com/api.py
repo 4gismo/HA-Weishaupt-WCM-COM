@@ -19,9 +19,13 @@ class WeishauptAPI:
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
-        result = heat_exchanger.process_values(self._host, self._username, self._password)
-        _LOGGER.debug("Fetching new data")
-        if result is not None:
-            self._data = json.loads(result)
-        else:
-            _LOGGER.warning("Cannot update data from WCM-COM")
+        _LOGGER.debug(f"Connecting to WCM-COM at {self._host} with user {self._username}")
+        try:
+            result = heat_exchanger.process_values(self._host, self._username, self._password)
+            if result:
+                self._data = json.loads(result)
+                _LOGGER.debug(f"Received data: {json.dumps(self._data, indent=2)}")
+            else:
+                _LOGGER.warning("WCM-COM returned no data � possible auth or network issue.")
+        except Exception as e:
+            _LOGGER.error(f"Exception during WCM-COM update: {e}")

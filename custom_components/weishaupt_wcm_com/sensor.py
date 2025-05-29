@@ -91,6 +91,16 @@ class WeishauptSensor(WeishauptBaseEntity, SensorEntity):
         """Return the unit of measurement."""
         return self._unit
 
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, "weishaupt_wcm")},
+            "name": "Weishaupt WCM-COM",
+            "manufacturer": "Weishaupt",
+            "model": "WCM-COM",
+            "configuration_url": f"http://{self.api()._host}/"
+        }
+
     async def async_update(self):
         _LOGGER.debug(f"[async_update] Updating sensor: {self._name}")
         await self.hass.async_add_executor_job(super().update)
