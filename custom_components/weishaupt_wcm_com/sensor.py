@@ -92,6 +92,10 @@ class WeishauptSensor(WeishauptBaseEntity, SensorEntity):
         return self._unit
 
     @property
+    def should_poll(self):
+        return True
+
+    @property
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, "weishaupt_wcm")},
