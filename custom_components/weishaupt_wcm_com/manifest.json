@@ -6,7 +6,7 @@
   "issue_tracker": "https://github.com/4gismo/HA-Weishaupt-WCM-COM/issues",
   "dependencies": [],
   "codeowners": ["@4gismo"],
-  "weishaupt-wcm-com@git+https://github.com/phamels/Py-Weishaupt-WCM-COM.git#egg=weishaupt-wcm-com",
+  "requirements": ["weishaupt-wcm-com@git+https://github.com/phamels/Py-Weishaupt-WCM-COM.git#egg=weishaupt-wcm-com"],
   "iot_class": "local_polling",
   "config_flow": true
 }
