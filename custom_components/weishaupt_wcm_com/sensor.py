@@ -10,9 +10,7 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     UnitOfTemperature,
-    UnitOfPower,
     UnitOfVolume,
-    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -21,7 +19,6 @@ from .const import DOMAIN
 from .const import (
     OIL_CONSUMPTION_KEY,
     OUTSIDE_TEMPERATURE_KEY,
-    LOAD_SETTING_KEY,
     WARM_WATER_TEMPERATURE_KEY,
     FLOW_TEMPERATURE_KEY,
     FLUE_GAS_TEMPERATURE_KEY,
@@ -37,11 +34,6 @@ from .const import (
     GAS_VALVE_2_KEY,
     HEATING_KEY,
     HEAT_DEMAND_KEY,
-    BUFFER_SENSOR_B10_KEY,
-    TIME_SINCE_LAST_SERVICE_KEY,
-    DAMPED_OUTSIDE_TEMPERATURE_KEY,
-    BURNER_STARTS_KEY,
-    BURNER_HOURS_KEY,
 )
 from . import WeishauptBaseEntity
 
@@ -61,13 +53,6 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-    ),
-    LOAD_SETTING_KEY: SensorEntityDescription(
-        key=LOAD_SETTING_KEY,
-        translation_key="load_setting",
-        device_class=SensorDeviceClass.POWER,
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfPower.KILO_WATT,
     ),
     WARM_WATER_TEMPERATURE_KEY: SensorEntityDescription(
         key=WARM_WATER_TEMPERATURE_KEY,
@@ -146,39 +131,6 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-    ),
-    BUFFER_SENSOR_B10_KEY: SensorEntityDescription(
-        key=BUFFER_SENSOR_B10_KEY,
-        translation_key="buffer_sensor_b10",
-        device_class=SensorDeviceClass.TEMPERATURE,
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-    ),
-    TIME_SINCE_LAST_SERVICE_KEY: SensorEntityDescription(
-        key=TIME_SINCE_LAST_SERVICE_KEY,
-        translation_key="time_since_last_service",
-        device_class=SensorDeviceClass.DURATION,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        native_unit_of_measurement=UnitOfTime.HOURS,
-    ),
-    DAMPED_OUTSIDE_TEMPERATURE_KEY: SensorEntityDescription(
-        key=DAMPED_OUTSIDE_TEMPERATURE_KEY,
-        translation_key="damped_outside_temperature",
-        device_class=SensorDeviceClass.TEMPERATURE,
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-    ),
-    BURNER_STARTS_KEY: SensorEntityDescription(
-        key=BURNER_STARTS_KEY,
-        translation_key="burner_starts",
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BURNER_HOURS_KEY: SensorEntityDescription(
-        key=BURNER_HOURS_KEY,
-        translation_key="burner_hours",
-        device_class=SensorDeviceClass.DURATION,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        native_unit_of_measurement=UnitOfTime.HOURS,
     ),
 }
 

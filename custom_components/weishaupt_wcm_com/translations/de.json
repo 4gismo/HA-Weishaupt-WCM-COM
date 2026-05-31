@@ -18,32 +18,62 @@
   },
   "entity": {
     "sensor": {
-      "flow_temperature":           { "name": "Vorlauftemperatur" },
-      "outside_temperature":        { "name": "Außentemperatur" },
-      "warm_water_temperature":     { "name": "Warmwassertemperatur" },
-      "flue_gas_temperature":       { "name": "Abgastemperatur" },
-      "room_temperature":           { "name": "Raumtemperatur" },
-      "mixed_external_temperature": { "name": "Gemischte Außentemperatur" },
-      "heat_demand":                { "name": "Wärmeanforderung" },
-      "damped_outside_temperature": { "name": "Gedämpfte Außentemperatur" },
-      "buffer_sensor_b10":          { "name": "Pufferfühler B10" },
-      "load_setting":               { "name": "Laststellung" },
-      "burner_hours":               { "name": "Brennerstunden" },
-      "burner_starts":              { "name": "Brennerstarts" },
-      "time_since_last_service":    { "name": "Zeit seit letzter Wartung" },
-      "oil_meter":                  { "name": "Ölzähler" },
-      "operating_mode":             { "name": "Betriebsmodus" },
-      "operating_phase":            { "name": "Betriebsphase" },
-      "flame":                      { "name": "Flamme" },
-      "pump":                       { "name": "Pumpe" },
-      "heating":                    { "name": "Heizung" },
-      "warm_water":                 { "name": "Warmwasser" },
-      "gas_valve_1":                { "name": "Gasventil 1" },
-      "gas_valve_2":                { "name": "Gasventil 2" },
-      "error":                      { "name": "Fehler" }
+      "flow_temperature": {
+        "name": "Vorlauftemperatur"
+      },
+      "outside_temperature": {
+        "name": "Außentemperatur"
+      },
+      "warm_water_temperature": {
+        "name": "Warmwassertemperatur"
+      },
+      "flue_gas_temperature": {
+        "name": "Abgastemperatur"
+      },
+      "room_temperature": {
+        "name": "Raumtemperatur"
+      },
+      "mixed_external_temperature": {
+        "name": "Gemischte Außentemperatur"
+      },
+      "heat_demand": {
+        "name": "Wärmeanforderung"
+      },
+      "operating_mode": {
+        "name": "Betriebsmodus"
+      },
+      "operating_phase": {
+        "name": "Betriebsphase"
+      },
+      "flame": {
+        "name": "Flamme"
+      },
+      "pump": {
+        "name": "Pumpe"
+      },
+      "heating": {
+        "name": "Heizung"
+      },
+      "warm_water": {
+        "name": "Warmwasser"
+      },
+      "gas_valve_1": {
+        "name": "Gasventil 1"
+      },
+      "gas_valve_2": {
+        "name": "Gasventil 2"
+      },
+      "error": {
+        "name": "Fehler"
+      },
+      "oil_meter": {
+        "name": "Ölzähler"
+      }
     },
     "switch": {
-      "polling": { "name": "Polling" }
+      "polling": {
+        "name": "Polling"
+      }
     }
   }
 }

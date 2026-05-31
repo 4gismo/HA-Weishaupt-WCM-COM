@@ -18,32 +18,62 @@
   },
   "entity": {
     "sensor": {
-      "flow_temperature":           { "name": "Flow Temperature" },
-      "outside_temperature":        { "name": "Outside Temperature" },
-      "warm_water_temperature":     { "name": "Warm Water Temperature" },
-      "flue_gas_temperature":       { "name": "Flue Gas Temperature" },
-      "room_temperature":           { "name": "Room Temperature" },
-      "mixed_external_temperature": { "name": "Mixed External Temperature" },
-      "heat_demand":                { "name": "Heat Demand" },
-      "damped_outside_temperature": { "name": "Damped Outside Temperature" },
-      "buffer_sensor_b10":          { "name": "Buffer Sensor B10" },
-      "load_setting":               { "name": "Load Setting" },
-      "burner_hours":               { "name": "Burner Hours" },
-      "burner_starts":              { "name": "Burner Starts" },
-      "time_since_last_service":    { "name": "Time Since Last Service" },
-      "oil_meter":                  { "name": "Oil Meter" },
-      "operating_mode":             { "name": "Operating Mode" },
-      "operating_phase":            { "name": "Operating Phase" },
-      "flame":                      { "name": "Flame" },
-      "pump":                       { "name": "Pump" },
-      "heating":                    { "name": "Heating" },
-      "warm_water":                 { "name": "Warm Water" },
-      "gas_valve_1":                { "name": "Gas Valve 1" },
-      "gas_valve_2":                { "name": "Gas Valve 2" },
-      "error":                      { "name": "Error" }
+      "flow_temperature": {
+        "name": "Flow Temperature"
+      },
+      "outside_temperature": {
+        "name": "Outside Temperature"
+      },
+      "warm_water_temperature": {
+        "name": "Warm Water Temperature"
+      },
+      "flue_gas_temperature": {
+        "name": "Flue Gas Temperature"
+      },
+      "room_temperature": {
+        "name": "Room Temperature"
+      },
+      "mixed_external_temperature": {
+        "name": "Mixed External Temperature"
+      },
+      "heat_demand": {
+        "name": "Heat Demand"
+      },
+      "operating_mode": {
+        "name": "Operating Mode"
+      },
+      "operating_phase": {
+        "name": "Operating Phase"
+      },
+      "flame": {
+        "name": "Flame"
+      },
+      "pump": {
+        "name": "Pump"
+      },
+      "heating": {
+        "name": "Heating"
+      },
+      "warm_water": {
+        "name": "Warm Water"
+      },
+      "gas_valve_1": {
+        "name": "Gas Valve 1"
+      },
+      "gas_valve_2": {
+        "name": "Gas Valve 2"
+      },
+      "error": {
+        "name": "Error"
+      },
+      "oil_meter": {
+        "name": "Oil Meter"
+      }
     },
     "switch": {
-      "polling": { "name": "Polling" }
+      "polling": {
+        "name": "Polling"
+      }
     }
   }
 }
