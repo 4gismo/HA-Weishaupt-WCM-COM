@@ -14,9 +14,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 
 class WeishauptPauseSwitch(WeishauptBaseEntity, SwitchEntity):
 
+    _attr_has_entity_name = True
+    _attr_translation_key = "polling"
+
     def __init__(self, hass):
         super().__init__(hass)
-        self._attr_name = "Weishaupt Polling"
         self._attr_unique_id = "weishaupt_wcm_polling"
 
     @property
