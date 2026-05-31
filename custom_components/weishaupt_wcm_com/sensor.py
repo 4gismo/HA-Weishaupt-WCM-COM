@@ -1,99 +1,216 @@
 """Platform for sensor integration."""
-from homeassistant.const import UnitOfTemperature
-from homeassistant.components.sensor import SensorEntity
 import logging
-from datetime import timedelta, datetime
 
+from homeassistant.components.sensor import (
+    SensorEntity,
+    SensorEntityDescription,
+    SensorDeviceClass,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import (
+    UnitOfTemperature,
+    UnitOfPower,
+    UnitOfVolume,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
-from .const import NAME_PREFIX
-
-from .const import OIL_CONSUMPTION_KEY
-from .const import OUTSIDE_TEMPERATURE_KEY
-from .const import LOAD_SETTING_KEY
-from .const import WARM_WATER_TEMPERATURE_KEY 
-from .const import FLOW_TEMPERATURE_KEY
-from .const import FLUE_GAS_TEMPERATURE_KEY
-from .const import MIXED_EXTERNAL_TEMPERATURE_KEY
-from .const import ROOM_TEMPERATURE_KEY
-from .const import OPERATING_MODE_KEY
-from .const import OPERATING_PHASE_KEY
-from .const import PUMP_KEY
-from .const import WARM_WATER_KEY
-from .const import FLAME_KEY
-from .const import ERROR_KEY
-from .const import GAS_VALVE_1_KEY
-from .const import GAS_VALVE_2_KEY
-from .const import HEATING_KEY
-
+from .const import DOMAIN, NAME_PREFIX
+from .const import (
+    OIL_CONSUMPTION_KEY,
+    OUTSIDE_TEMPERATURE_KEY,
+    LOAD_SETTING_KEY,
+    WARM_WATER_TEMPERATURE_KEY,
+    FLOW_TEMPERATURE_KEY,
+    FLUE_GAS_TEMPERATURE_KEY,
+    MIXED_EXTERNAL_TEMPERATURE_KEY,
+    ROOM_TEMPERATURE_KEY,
+    OPERATING_MODE_KEY,
+    OPERATING_PHASE_KEY,
+    PUMP_KEY,
+    WARM_WATER_KEY,
+    FLAME_KEY,
+    ERROR_KEY,
+    GAS_VALVE_1_KEY,
+    GAS_VALVE_2_KEY,
+    HEATING_KEY,
+    HEAT_DEMAND_KEY,
+    BUFFER_SENSOR_B10_KEY,
+    TIME_SINCE_LAST_SERVICE_KEY,
+    DAMPED_OUTSIDE_TEMPERATURE_KEY,
+    BURNER_STARTS_KEY,
+    BURNER_HOURS_KEY,
+)
 from . import WeishauptBaseEntity
 
 _LOGGER = logging.getLogger(__name__)
 
+SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
+    OIL_CONSUMPTION_KEY: SensorEntityDescription(
+        key=OIL_CONSUMPTION_KEY,
+        name="Oil Meter",
+        device_class=SensorDeviceClass.VOLUME,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfVolume.LITERS,
+    ),
+    OUTSIDE_TEMPERATURE_KEY: SensorEntityDescription(
+        key=OUTSIDE_TEMPERATURE_KEY,
+        name="Outside Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    LOAD_SETTING_KEY: SensorEntityDescription(
+        key=LOAD_SETTING_KEY,
+        name="Load Setting",
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfPower.KILO_WATT,
+    ),
+    WARM_WATER_TEMPERATURE_KEY: SensorEntityDescription(
+        key=WARM_WATER_TEMPERATURE_KEY,
+        name="Warm Water Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    FLOW_TEMPERATURE_KEY: SensorEntityDescription(
+        key=FLOW_TEMPERATURE_KEY,
+        name="Flow Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    FLUE_GAS_TEMPERATURE_KEY: SensorEntityDescription(
+        key=FLUE_GAS_TEMPERATURE_KEY,
+        name="Flue Gas Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    ROOM_TEMPERATURE_KEY: SensorEntityDescription(
+        key=ROOM_TEMPERATURE_KEY,
+        name="Room Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    MIXED_EXTERNAL_TEMPERATURE_KEY: SensorEntityDescription(
+        key=MIXED_EXTERNAL_TEMPERATURE_KEY,
+        name="Mixed External Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    OPERATING_MODE_KEY: SensorEntityDescription(
+        key=OPERATING_MODE_KEY,
+        name="Operating Mode",
+    ),
+    OPERATING_PHASE_KEY: SensorEntityDescription(
+        key=OPERATING_PHASE_KEY,
+        name="Operating Phase",
+    ),
+    PUMP_KEY: SensorEntityDescription(
+        key=PUMP_KEY,
+        name="Pump",
+    ),
+    WARM_WATER_KEY: SensorEntityDescription(
+        key=WARM_WATER_KEY,
+        name="Warm Water",
+    ),
+    FLAME_KEY: SensorEntityDescription(
+        key=FLAME_KEY,
+        name="Flame",
+    ),
+    ERROR_KEY: SensorEntityDescription(
+        key=ERROR_KEY,
+        name="Error",
+    ),
+    GAS_VALVE_1_KEY: SensorEntityDescription(
+        key=GAS_VALVE_1_KEY,
+        name="Gas Valve 1",
+    ),
+    GAS_VALVE_2_KEY: SensorEntityDescription(
+        key=GAS_VALVE_2_KEY,
+        name="Gas Valve 2",
+    ),
+    HEATING_KEY: SensorEntityDescription(
+        key=HEATING_KEY,
+        name="Heating",
+    ),
+    HEAT_DEMAND_KEY: SensorEntityDescription(
+        key=HEAT_DEMAND_KEY,
+        name="Heat Demand",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    BUFFER_SENSOR_B10_KEY: SensorEntityDescription(
+        key=BUFFER_SENSOR_B10_KEY,
+        name="Buffer Sensor B10",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    TIME_SINCE_LAST_SERVICE_KEY: SensorEntityDescription(
+        key=TIME_SINCE_LAST_SERVICE_KEY,
+        name="Time Since Last Service",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+    ),
+    DAMPED_OUTSIDE_TEMPERATURE_KEY: SensorEntityDescription(
+        key=DAMPED_OUTSIDE_TEMPERATURE_KEY,
+        name="Damped Outside Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    BURNER_STARTS_KEY: SensorEntityDescription(
+        key=BURNER_STARTS_KEY,
+        name="Burner Starts",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    BURNER_HOURS_KEY: SensorEntityDescription(
+        key=BURNER_HOURS_KEY,
+        name="Burner Hours",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+    ),
+}
+
+
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the sensor platform."""
     if discovery_info is None:
         return
     add_entities(_build_entities(hass, config))
 
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    """Set up the sensor platform via config entry (UI)."""
     async_add_entities(_build_entities(hass, {}))
 
+
 def _build_entities(hass, config):
-    return [
-        WeishauptSensor(hass, config, OIL_CONSUMPTION_KEY, "l"),
-        WeishauptSensor(hass, config, OUTSIDE_TEMPERATURE_KEY, "°C"),
-        WeishauptSensor(hass, config, LOAD_SETTING_KEY, "kW"),
-        WeishauptSensor(hass, config, WARM_WATER_TEMPERATURE_KEY, "°C"),
-        WeishauptSensor(hass, config, FLOW_TEMPERATURE_KEY, "°C"),
-        WeishauptSensor(hass, config, FLUE_GAS_TEMPERATURE_KEY, "°C"),
-        WeishauptSensor(hass, config, ROOM_TEMPERATURE_KEY, "°C"),
-        WeishauptSensor(hass, config, MIXED_EXTERNAL_TEMPERATURE_KEY, "°C"),
-        WeishauptSensor(hass, config, OPERATING_MODE_KEY, ""),
-        WeishauptSensor(hass, config, OPERATING_PHASE_KEY, ""),
-        WeishauptSensor(hass, config, PUMP_KEY, ""),
-        WeishauptSensor(hass, config, WARM_WATER_KEY, ""),
-        WeishauptSensor(hass, config, FLAME_KEY, ""),
-        WeishauptSensor(hass, config, ERROR_KEY, ""),
-        WeishauptSensor(hass, config, GAS_VALVE_1_KEY, ""),
-        WeishauptSensor(hass, config, GAS_VALVE_2_KEY, ""),
-        WeishauptSensor(hass, config, HEATING_KEY, ""),
-    ]
+    return [WeishauptSensor(hass, config, desc) for desc in SENSOR_DESCRIPTIONS.values()]
+
 
 class WeishauptSensor(WeishauptBaseEntity, SensorEntity):
-    """Representation of a Sensor."""
 
-    def __init__(self, hass, config, sensor_name, sensor_unit):
+    def __init__(self, hass, config, description: SensorEntityDescription):
         super().__init__(hass, config)
-        """Initialize the sensor."""
-        self._state = None
-        self._data = {}
-        self._config = config
-        self._name = sensor_name
-        self._unit = sensor_unit
+        self.entity_description = description
+        self._attr_unique_id = f"weishaupt_wcm_{description.key.lower().replace(' ', '_')}"
 
     @property
     def name(self):
-        """Return the name of the sensor."""
-        return NAME_PREFIX + self._name
+        return NAME_PREFIX + self.entity_description.name
 
     @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._state
-
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement."""
-        return self._unit
-
-    @property
-    def should_poll(self):
-        return True
+    def native_value(self):
+        return self.api().getData().get(self.entity_description.key)
 
     @property
     def device_info(self):
@@ -102,14 +219,9 @@ class WeishauptSensor(WeishauptBaseEntity, SensorEntity):
             "name": "Weishaupt WCM-COM",
             "manufacturer": "Weishaupt",
             "model": "WCM-COM",
-            "configuration_url": f"http://{self.api()._host}/"
+            "configuration_url": f"http://{self.api()._host}/",
         }
 
     async def async_update(self):
-        _LOGGER.debug(f"[async_update] Updating sensor: {self._name}")
+        _LOGGER.debug("[async_update] Updating sensor: %s", self.entity_description.key)
         await self.hass.async_add_executor_job(super().update)
-        try:
-            self._state = self.api().getData().get(self._name)
-        except Exception as e:
-            _LOGGER.warning(f"[async_update] Failed to update sensor {self._name}: {e}")
-            self._state = None

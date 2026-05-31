@@ -34,6 +34,7 @@ class WeishauptPauseSwitch(WeishauptBaseEntity, SwitchEntity):
             "name": "Weishaupt WCM-COM",
             "manufacturer": "Weishaupt",
             "model": "WCM-COM",
+            "configuration_url": f"http://{self.api()._host}/",
         }
 
     async def async_turn_on(self, **kwargs):

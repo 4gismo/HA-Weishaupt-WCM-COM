@@ -40,6 +40,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_sensor = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
     unload_switch = await hass.config_entries.async_forward_entry_unload(entry, "switch")
+    if unload_sensor and unload_switch:
+        hass.data.pop(DOMAIN, None)
     return unload_sensor and unload_switch
 
 class WeishauptBaseEntity:
