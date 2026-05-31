@@ -14,12 +14,24 @@ class WeishauptAPI:
         self._username = username
         self._password = password
         self._data = {}
+        self._paused = False
+
+    def pause(self):
+        self._paused = True
+        _LOGGER.info("WCM-COM polling paused")
+
+    def resume(self):
+        self._paused = False
+        _LOGGER.info("WCM-COM polling resumed")
 
     def getData(self):
         return self._data
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
+        if self._paused:
+            _LOGGER.debug("WCM-COM polling paused, skipping update")
+            return
         _LOGGER.debug("Connecting to WCM-COM at %s with user %s", self._host, self._username)
         try:
             result = heat_exchanger.process_values(self._host, self._username, self._password)

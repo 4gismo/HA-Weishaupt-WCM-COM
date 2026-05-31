@@ -34,11 +34,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     api = WeishauptAPI(entry.data[CONF_HOST], entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
     hass.data[DOMAIN] = api
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor", "switch"])
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    return await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    unload_sensor = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    unload_switch = await hass.config_entries.async_forward_entry_unload(entry, "switch")
+    return unload_sensor and unload_switch
 
 class WeishauptBaseEntity:
     def __init__(self, hass, config=None):
