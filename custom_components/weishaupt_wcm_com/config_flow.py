@@ -3,6 +3,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD
 from .const import DOMAIN
 
+
 class WeishauptConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
@@ -10,7 +11,21 @@ class WeishauptConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            return self.async_create_entry(title="Weishaupt WCM-COM", data=user_input)
+            try:
+                from weishaupt_wcm_com import heat_exchanger
+                import json
+                result = await self.hass.async_add_executor_job(
+                    heat_exchanger.process_values,
+                    user_input[CONF_HOST],
+                    user_input[CONF_USERNAME],
+                    user_input[CONF_PASSWORD],
+                )
+                if result is None or not json.loads(result):
+                    errors["base"] = "cannot_connect"
+                else:
+                    return self.async_create_entry(title="Weishaupt WCM-COM", data=user_input)
+            except Exception:
+                errors["base"] = "cannot_connect"
 
         data_schema = vol.Schema({
             vol.Required(CONF_HOST): str,
