@@ -11,6 +11,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     UnitOfTemperature,
     UnitOfVolume,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -34,6 +35,10 @@ from .const import (
     GAS_VALVE_2_KEY,
     HEATING_KEY,
     HEAT_DEMAND_KEY,
+    RETURN_TEMPERATURE_KEY,
+    TIME_SINCE_LAST_SERVICE_KEY,
+    BURNER_STARTS_KEY,
+    BURNER_HOURS_KEY,
 )
 from . import WeishauptBaseEntity
 
@@ -131,6 +136,32 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    RETURN_TEMPERATURE_KEY: SensorEntityDescription(
+        key=RETURN_TEMPERATURE_KEY,
+        translation_key="return_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    TIME_SINCE_LAST_SERVICE_KEY: SensorEntityDescription(
+        key=TIME_SINCE_LAST_SERVICE_KEY,
+        translation_key="time_since_last_service",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+    ),
+    BURNER_STARTS_KEY: SensorEntityDescription(
+        key=BURNER_STARTS_KEY,
+        translation_key="burner_starts",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    BURNER_HOURS_KEY: SensorEntityDescription(
+        key=BURNER_HOURS_KEY,
+        translation_key="burner_hours",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfTime.HOURS,
     ),
 }
 

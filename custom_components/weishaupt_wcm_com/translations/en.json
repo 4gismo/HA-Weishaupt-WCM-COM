@@ -68,6 +68,18 @@
       },
       "oil_meter": {
         "name": "Oil Meter"
+      },
+      "return_temperature": {
+        "name": "Return Temperature"
+      },
+      "time_since_last_service": {
+        "name": "Time Since Last Service"
+      },
+      "burner_starts": {
+        "name": "Burner Starts"
+      },
+      "burner_hours": {
+        "name": "Burner Hours"
       }
     },
     "switch": {
