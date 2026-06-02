@@ -16,6 +16,14 @@ Custom Integration für Weishaupt Heizungsanlagen mit **WCM-COM** Netzwerkmodul.
 
 > Basiert auf [phamels/HA-Weishaupt-WCM-COM](https://github.com/phamels/HA-Weishaupt-WCM-COM)
 
+### Geräteschnittstelle
+
+Die Integration liest direkt von der WCM-COM Weboberfläche:
+
+![Wärmeerzeuger Prozesswerte](images/device_process_values.jpeg)
+
+![Heizkreis Benutzer — Betriebsart HK](images/device_operating_mode.jpeg)
+
 ### Voraussetzungen
 
 - Weishaupt Heizung mit **WCM-COM** Netzwerkmodul
@@ -178,6 +186,14 @@ Logs unter **Einstellungen → System → Protokolle**.
 Custom integration for Weishaupt heating systems equipped with the **WCM-COM** network module. Reads live process values directly from the device over your local network — no cloud, no subscription.
 
 > Forked from [phamels/HA-Weishaupt-WCM-COM](https://github.com/phamels/HA-Weishaupt-WCM-COM)
+
+### Device Interface
+
+The integration reads directly from the WCM-COM web interface:
+
+![Boiler process values](images/device_process_values.jpeg)
+
+![Heating circuit — operating mode](images/device_operating_mode.jpeg)
 
 ### Requirements
 
