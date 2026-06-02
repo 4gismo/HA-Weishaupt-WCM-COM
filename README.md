@@ -24,40 +24,63 @@ Custom Integration für Weishaupt Heizungsanlagen mit **WCM-COM** Netzwerkmodul.
 
 ### Funktionen
 
-- **17 Sensor-Entities** mit korrekten Geräteklassen, Einheiten und Verlaufsdiagrammen
+- **22 Sensor-Entities**, **6 Binärsensoren**, **1 Auswahl-Entity** (Betriebsart) und **1 Schalter**
 - **Vollständig zweisprachig** — Entitynamen folgen automatisch der HA-Spracheinstellung (Deutsch / Englisch)
+- **Betriebsart HK umschalten** — direkt aus HA heraus setzen (Standby, Normal, Absenk, Sommer, Programm 1–3, Wie Leitstelle)
 - **Polling-Pause-Schalter** — stoppt die Abfrage durch HA, damit du dich direkt per Browser an der Heizung einloggen kannst (WCM-COM erlaubt nur einen aktiven Nutzer gleichzeitig)
 - Lokale Abfrage per HTTP — keine Cloud-Abhängigkeit
 - HACS-kompatibel, UI-basierte Einrichtung
 
-### Sensoren
+### Entities
 
 #### Temperaturen
 
 | Entity | Beschreibung | Einheit |
 |---|---|---|
 | Vorlauftemperatur | Vorlauftemperatur (eSTB) | °C |
+| Rücklauftemperatur | Rücklauftemperatur | °C |
 | Außentemperatur | Außensensor | °C |
 | Warmwassertemperatur | Brauchwassertemperatur | °C |
 | Abgastemperatur | Abgastemperatur | °C |
-| Raumtemperatur | Raumsensor | °C |
-| Gemischte Außentemperatur | Gemischter Außenkreis | °C |
 | Wärmeanforderung | Aktueller Wärmeanforderungs-Sollwert | °C |
+| Normal-Raumtemp | Sollwert Normaltemperatur Raum | °C |
+| Absenk-Raumtemp | Sollwert Absenktemperatur Raum | °C |
+| Min. VL Soll | Minimaler Vorlauftemperatur-Sollwert | °C |
+| Max. VL Soll | Maximaler Vorlauftemperatur-Sollwert | °C |
+| Schaltdifferenz VL | Hysterese Vorlauftemperatur | °C |
+| Anlagenfrostschutz | Frostschutztemperatur Anlage | °C |
 
 #### Betrieb & Status
 
 | Entity | Beschreibung | Einheit |
 |---|---|---|
-| Betriebsmodus | Aktueller Betriebsmodus | — |
 | Betriebsphase | Aktuelle Betriebsphase | — |
-| Flamme | Brennerflamme aktiv | — |
-| Pumpe | Umwälzpumpe aktiv | — |
-| Heizung | Heizkreis aktiv | — |
-| Warmwasser | Warmwasserkreis aktiv | — |
-| Gasventil 1 | Gasventil 1 Status | — |
-| Gasventil 2 | Gasventil 2 Status | — |
 | Fehler | Aktiver Fehlercode | — |
+| Laststellung | Aktuelle Brennerlast | % |
+| Max. Leistung WW | Maximale Leistung Warmwasser | % |
+| Brenner Taktsperre | Mindestpause zwischen Brennerstarts | min |
+| Max. Ladezeit WW | Maximale Warmwasser-Ladezeit | min |
 | Ölzähler | Ölverbrauchszähler | L |
+| Brennerstarts | Gesamtzahl Brennerstarts | — |
+| Brennerstunden | Gesamte Brennerstunden | h |
+| Zeit seit letzter Wartung | Stunden seit letztem Service | h |
+
+#### Binärsensoren
+
+| Entity | Beschreibung | Zustände |
+|---|---|---|
+| Flamme | Brennerflamme | Ein / Aus |
+| Pumpe | Umwälzpumpe | Ein / Aus |
+| Heizung | Heizkreis aktiv | Ein / Aus |
+| Warmwasser | Warmwasserkreis aktiv | Ein / Aus |
+| Gasventil 1 | Gasventil 1 | Offen / Geschlossen |
+| Gasventil 2 | Gasventil 2 | Offen / Geschlossen |
+
+#### Auswahl
+
+| Entity | Beschreibung | Optionen |
+|---|---|---|
+| Betriebsart HK | Betriebsart Heizkreis 1 (les- und schreibbar) | Standby, Normal, Absenk, Sommer, Programm 1–3, Wie Leitstelle |
 
 #### Schalter
 
@@ -112,8 +135,9 @@ cards:
       - entity: sensor.weishaupt_wcm_com_vorlauftemperatur
       - entity: sensor.weishaupt_wcm_com_aussentemperatur
       - entity: sensor.weishaupt_wcm_com_warmwassertemperatur
-      - entity: sensor.weishaupt_wcm_com_flamme
-      - entity: sensor.weishaupt_wcm_com_fehler
+      - entity: sensor.weishaupt_wcm_com_laststellung
+      - entity: binary_sensor.weishaupt_wcm_com_flamme
+      - entity: select.weishaupt_wcm_com_betriebsart_hk
       - entity: switch.weishaupt_wcm_com_polling
   - type: history-graph
     title: Temperaturen (24h)
@@ -121,6 +145,7 @@ cards:
     entities:
       - entity: sensor.weishaupt_wcm_com_vorlauftemperatur
       - entity: sensor.weishaupt_wcm_com_aussentemperatur
+      - entity: sensor.weishaupt_wcm_com_warmwassertemperatur
 ```
 
 ### Debugging
@@ -162,40 +187,63 @@ Custom integration for Weishaupt heating systems equipped with the **WCM-COM** n
 
 ### Features
 
-- **17 sensor entities** with proper device classes, units, and history tracking
+- **22 sensor entities**, **6 binary sensors**, **1 select entity** (operating mode) and **1 switch**
 - **Fully bilingual** — entity names follow the HA language setting automatically (German / English)
+- **Set operating mode** — switch the heating circuit mode directly from HA (Standby, Normal, Setback, Summer, Program 1–3, Follow Master)
 - **Polling pause switch** — temporarily stops HA from querying the device so you can log in directly via browser (WCM-COM only allows one active user at a time)
 - Local polling via HTTP — no cloud dependency
 - HACS compatible, UI-based setup
 
-### Sensors
+### Entities
 
 #### Temperatures
 
 | Entity | Description | Unit |
 |---|---|---|
 | Flow Temperature | Supply line temperature (Vorlauf) | °C |
+| Return Temperature | Return line temperature | °C |
 | Outside Temperature | Outside sensor | °C |
 | Warm Water Temperature | Domestic hot water | °C |
 | Flue Gas Temperature | Exhaust / flue gas | °C |
-| Room Temperature | Room sensor | °C |
-| Mixed External Temperature | Mixed external circuit | °C |
 | Heat Demand | Current heat demand setpoint | °C |
+| Normal Room Temp | Normal room temperature setpoint | °C |
+| Setback Room Temp | Setback room temperature setpoint | °C |
+| Min. Flow Temp Target | Minimum flow temperature setpoint | °C |
+| Max. Flow Temp Target | Maximum flow temperature setpoint | °C |
+| Flow Temp Hysteresis | Flow temperature switching hysteresis | °C |
+| System Frost Protection | System frost protection temperature | °C |
 
 #### Operation & Status
 
 | Entity | Description | Unit |
 |---|---|---|
-| Operating Mode | Current operation mode | — |
-| Operating Phase | Current operation phase | — |
-| Flame | Burner flame active | — |
-| Pump | Circulation pump active | — |
-| Heating | Heating circuit active | — |
-| Warm Water | Hot water circuit active | — |
-| Gas Valve 1 | Gas valve 1 state | — |
-| Gas Valve 2 | Gas valve 2 state | — |
+| Operating Phase | Current operating phase | — |
 | Error | Active error code | — |
+| Burner Load | Current burner load | % |
+| Max. DHW Output | Maximum domestic hot water output | % |
+| Burner Lockout Time | Minimum pause between burner starts | min |
+| Max. DHW Charge Time | Maximum DHW charge duration | min |
 | Oil Meter | Oil consumption counter | L |
+| Burner Starts | Total burner start count | — |
+| Burner Hours | Total burner operating hours | h |
+| Time Since Last Service | Hours since last service | h |
+
+#### Binary Sensors
+
+| Entity | Description | States |
+|---|---|---|
+| Flame | Burner flame | On / Off |
+| Pump | Circulation pump | On / Off |
+| Heating | Heating circuit active | On / Off |
+| Warm Water | Hot water circuit active | On / Off |
+| Gas Valve 1 | Gas valve 1 | Open / Closed |
+| Gas Valve 2 | Gas valve 2 | Open / Closed |
+
+#### Select
+
+| Entity | Description | Options |
+|---|---|---|
+| Operating Mode HK | Heating circuit 1 mode (readable and writable) | Standby, Normal, Setback, Summer, Program 1–3, Follow Master |
 
 #### Switch
 
@@ -250,8 +298,9 @@ cards:
       - entity: sensor.weishaupt_wcm_com_flow_temperature
       - entity: sensor.weishaupt_wcm_com_outside_temperature
       - entity: sensor.weishaupt_wcm_com_warm_water_temperature
-      - entity: sensor.weishaupt_wcm_com_flame
-      - entity: sensor.weishaupt_wcm_com_error
+      - entity: sensor.weishaupt_wcm_com_burner_load
+      - entity: binary_sensor.weishaupt_wcm_com_flame
+      - entity: select.weishaupt_wcm_com_operating_mode_hk
       - entity: switch.weishaupt_wcm_com_polling
   - type: history-graph
     title: Temperatures (24h)
@@ -259,6 +308,7 @@ cards:
     entities:
       - entity: sensor.weishaupt_wcm_com_flow_temperature
       - entity: sensor.weishaupt_wcm_com_outside_temperature
+      - entity: sensor.weishaupt_wcm_com_warm_water_temperature
 ```
 
 ### Debugging
