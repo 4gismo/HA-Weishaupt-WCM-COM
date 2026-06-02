@@ -28,7 +28,7 @@ from .const import (
     OPERATING_PHASE_KEY,
     ERROR_KEY,
     HEAT_DEMAND_KEY,
-    RETURN_TEMPERATURE_KEY,
+    HEATING_SPECIAL_LEVEL_KEY,
     TIME_SINCE_LAST_SERVICE_KEY,
     BURNER_STARTS_KEY,
     BURNER_HOURS_KEY,
@@ -46,12 +46,20 @@ from . import WeishauptBaseEntity
 _LOGGER = logging.getLogger(__name__)
 
 SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
-    OIL_CONSUMPTION_KEY: SensorEntityDescription(
-        key=OIL_CONSUMPTION_KEY,
-        translation_key="oil_meter",
-        device_class=SensorDeviceClass.VOLUME,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        native_unit_of_measurement=UnitOfVolume.LITERS,
+    # --- Live process temperatures ---
+    FLOW_TEMPERATURE_KEY: SensorEntityDescription(
+        key=FLOW_TEMPERATURE_KEY,
+        translation_key="flow_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    FLUE_GAS_TEMPERATURE_KEY: SensorEntityDescription(
+        key=FLUE_GAS_TEMPERATURE_KEY,
+        translation_key="flue_gas_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
     OUTSIDE_TEMPERATURE_KEY: SensorEntityDescription(
         key=OUTSIDE_TEMPERATURE_KEY,
@@ -63,20 +71,6 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
     WARM_WATER_TEMPERATURE_KEY: SensorEntityDescription(
         key=WARM_WATER_TEMPERATURE_KEY,
         translation_key="warm_water_temperature",
-        device_class=SensorDeviceClass.TEMPERATURE,
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-    ),
-    FLOW_TEMPERATURE_KEY: SensorEntityDescription(
-        key=FLOW_TEMPERATURE_KEY,
-        translation_key="flow_temperature",
-        device_class=SensorDeviceClass.TEMPERATURE,
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-    ),
-    FLUE_GAS_TEMPERATURE_KEY: SensorEntityDescription(
-        key=FLUE_GAS_TEMPERATURE_KEY,
-        translation_key="flue_gas_temperature",
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -95,14 +89,6 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    OPERATING_PHASE_KEY: SensorEntityDescription(
-        key=OPERATING_PHASE_KEY,
-        translation_key="operating_phase",
-    ),
-    ERROR_KEY: SensorEntityDescription(
-        key=ERROR_KEY,
-        translation_key="error",
-    ),
     HEAT_DEMAND_KEY: SensorEntityDescription(
         key=HEAT_DEMAND_KEY,
         translation_key="heat_demand",
@@ -110,20 +96,22 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    RETURN_TEMPERATURE_KEY: SensorEntityDescription(
-        key=RETURN_TEMPERATURE_KEY,
-        translation_key="return_temperature",
-        device_class=SensorDeviceClass.TEMPERATURE,
+    # --- Operating status ---
+    OPERATING_PHASE_KEY: SensorEntityDescription(
+        key=OPERATING_PHASE_KEY,
+        translation_key="operating_phase",
+    ),
+    BURNER_LOAD_KEY: SensorEntityDescription(
+        key=BURNER_LOAD_KEY,
+        translation_key="burner_load",
         state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        native_unit_of_measurement=PERCENTAGE,
     ),
-    TIME_SINCE_LAST_SERVICE_KEY: SensorEntityDescription(
-        key=TIME_SINCE_LAST_SERVICE_KEY,
-        translation_key="time_since_last_service",
-        device_class=SensorDeviceClass.DURATION,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-        native_unit_of_measurement=UnitOfTime.HOURS,
+    ERROR_KEY: SensorEntityDescription(
+        key=ERROR_KEY,
+        translation_key="error",
     ),
+    # --- Counters & service ---
     BURNER_STARTS_KEY: SensorEntityDescription(
         key=BURNER_STARTS_KEY,
         translation_key="burner_starts",
@@ -136,15 +124,30 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfTime.HOURS,
     ),
-    BURNER_LOAD_KEY: SensorEntityDescription(
-        key=BURNER_LOAD_KEY,
-        translation_key="burner_load",
-        state_class=SensorStateClass.MEASUREMENT,
-        native_unit_of_measurement=PERCENTAGE,
+    TIME_SINCE_LAST_SERVICE_KEY: SensorEntityDescription(
+        key=TIME_SINCE_LAST_SERVICE_KEY,
+        translation_key="time_since_last_service",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfTime.HOURS,
     ),
+    OIL_CONSUMPTION_KEY: SensorEntityDescription(
+        key=OIL_CONSUMPTION_KEY,
+        translation_key="oil_meter",
+        device_class=SensorDeviceClass.VOLUME,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        native_unit_of_measurement=UnitOfVolume.LITERS,
+    ),
+    # --- Configuration setpoints ---
     SYSTEM_FROST_PROTECTION_KEY: SensorEntityDescription(
         key=SYSTEM_FROST_PROTECTION_KEY,
         translation_key="system_frost_protection",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    HEATING_SPECIAL_LEVEL_KEY: SensorEntityDescription(
+        key=HEATING_SPECIAL_LEVEL_KEY,
+        translation_key="heating_special_level",
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
@@ -186,12 +189,6 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         native_unit_of_measurement=UnitOfTime.MINUTES,
     ),
 }
-
-
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    if discovery_info is None:
-        return
-    add_entities(_build_entities(hass, config))
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):

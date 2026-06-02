@@ -48,8 +48,8 @@
       "oil_meter": {
         "name": "Oil Meter"
       },
-      "return_temperature": {
-        "name": "Return Temperature"
+      "heating_special_level": {
+        "name": "Heating Special Level"
       },
       "time_since_last_service": {
         "name": "Time Since Last Service"

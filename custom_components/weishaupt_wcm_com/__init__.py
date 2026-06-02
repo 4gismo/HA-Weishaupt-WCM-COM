@@ -3,8 +3,6 @@
 import logging
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.typing import ConfigType
-from homeassistant.helpers.discovery import async_load_platform
 
 from .const import DOMAIN
 from .api import WeishauptAPI
@@ -17,23 +15,9 @@ from homeassistant.const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """YAML-based setup."""
-    if DOMAIN not in config:
-        return True
-
-    conf = config[DOMAIN]
-    api = WeishauptAPI(conf[CONF_HOST], conf[CONF_USERNAME], conf[CONF_PASSWORD])
-    hass.data[DOMAIN] = api
-
-    await async_load_platform(hass, "sensor", DOMAIN, {}, config)
-    return True
-
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """UI-based setup via config entry."""
     api = WeishauptAPI(entry.data[CONF_HOST], entry.data[CONF_USERNAME], entry.data[CONF_PASSWORD])
     hass.data[DOMAIN] = api
-
     await hass.config_entries.async_forward_entry_setups(entry, ["sensor", "binary_sensor", "select", "switch"])
     return True
 

@@ -28,11 +28,6 @@ BINARY_SENSOR_DESCRIPTIONS: dict[str, BinarySensorEntityDescription] = {
         translation_key="flame",
         device_class=BinarySensorDeviceClass.HEAT,
     ),
-    PUMP_KEY: BinarySensorEntityDescription(
-        key=PUMP_KEY,
-        translation_key="pump",
-        device_class=BinarySensorDeviceClass.RUNNING,
-    ),
     GAS_VALVE_1_KEY: BinarySensorEntityDescription(
         key=GAS_VALVE_1_KEY,
         translation_key="gas_valve_1",
@@ -53,6 +48,21 @@ BINARY_SENSOR_DESCRIPTIONS: dict[str, BinarySensorEntityDescription] = {
         translation_key="warm_water",
         device_class=BinarySensorDeviceClass.RUNNING,
     ),
+    PUMP_KEY: BinarySensorEntityDescription(
+        key=PUMP_KEY,
+        translation_key="pump",
+        device_class=BinarySensorDeviceClass.RUNNING,
+    ),
+}
+
+# State-dependent icons per entity key: (icon_on, icon_off)
+_ICONS: dict[str, tuple[str, str]] = {
+    FLAME_KEY:      ("mdi:fire",          "mdi:fire-off"),
+    PUMP_KEY:       ("mdi:pump",           "mdi:pump-off"),
+    HEATING_KEY:    ("mdi:radiator",       "mdi:radiator-off"),
+    WARM_WATER_KEY: ("mdi:water-boiler",   "mdi:water-boiler-off"),
+    GAS_VALVE_1_KEY: ("mdi:valve-open",   "mdi:valve-closed"),
+    GAS_VALVE_2_KEY: ("mdi:valve-open",   "mdi:valve-closed"),
 }
 
 
@@ -74,6 +84,13 @@ class WeishauptBinarySensor(WeishauptBaseEntity, BinarySensorEntity):
         if value is None:
             return None
         return bool(value)
+
+    @property
+    def icon(self) -> str | None:
+        icons = _ICONS.get(self.entity_description.key)
+        if icons is None:
+            return None
+        return icons[0] if self.is_on else icons[1]
 
     async def async_update(self):
         _LOGGER.debug("[async_update] Updating binary sensor: %s", self.entity_description.key)

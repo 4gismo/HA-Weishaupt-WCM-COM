@@ -46,7 +46,6 @@ Die Integration liest direkt von der WCM-COM Weboberfläche:
 | Entity | Beschreibung | Einheit |
 |---|---|---|
 | Vorlauftemperatur | Vorlauftemperatur (eSTB) | °C |
-| Rücklauftemperatur | Rücklauftemperatur | °C |
 | Außentemperatur | Außensensor | °C |
 | Warmwassertemperatur | Brauchwassertemperatur | °C |
 | Abgastemperatur | Abgastemperatur | °C |
@@ -56,6 +55,7 @@ Die Integration liest direkt von der WCM-COM Weboberfläche:
 | Min. VL Soll | Minimaler Vorlauftemperatur-Sollwert | °C |
 | Max. VL Soll | Maximaler Vorlauftemperatur-Sollwert | °C |
 | Schaltdifferenz VL | Hysterese Vorlauftemperatur | °C |
+| Sonderniveau Heizbetrieb | Max. Vorlauftemperatur Sonderbetrieb (P18) | °C |
 | Anlagenfrostschutz | Frostschutztemperatur Anlage | °C |
 
 #### Betrieb & Status
@@ -217,7 +217,6 @@ The integration reads directly from the WCM-COM web interface:
 | Entity | Description | Unit |
 |---|---|---|
 | Flow Temperature | Supply line temperature (Vorlauf) | °C |
-| Return Temperature | Return line temperature | °C |
 | Outside Temperature | Outside sensor | °C |
 | Warm Water Temperature | Domestic hot water | °C |
 | Flue Gas Temperature | Exhaust / flue gas | °C |
@@ -227,6 +226,7 @@ The integration reads directly from the WCM-COM web interface:
 | Min. Flow Temp Target | Minimum flow temperature setpoint | °C |
 | Max. Flow Temp Target | Maximum flow temperature setpoint | °C |
 | Flow Temp Hysteresis | Flow temperature switching hysteresis | °C |
+| Heating Special Level | Max. flow temp special heating mode (P18) | °C |
 | System Frost Protection | System frost protection temperature | °C |
 
 #### Operation & Status

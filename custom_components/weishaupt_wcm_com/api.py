@@ -49,8 +49,7 @@ class WeishauptAPI:
             return
         _LOGGER.debug("Connecting to WCM-COM at %s with user %s", self._host, self._username)
         try:
-            result = heat_exchanger.process_values(self._host, self._username, self._password)
-            self._data = json.loads(result)
+            self._data = heat_exchanger.process_values(self._host, self._username, self._password)
             _LOGGER.debug("Received data: %s", json.dumps(self._data, indent=2))
         except requests.exceptions.ConnectionError:
             _LOGGER.error("WCM-COM not reachable at http://%s — check host/IP", self._host)

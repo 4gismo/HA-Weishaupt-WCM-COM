@@ -48,8 +48,8 @@
       "oil_meter": {
         "name": "Ölzähler"
       },
-      "return_temperature": {
-        "name": "Rücklauftemperatur"
+      "heating_special_level": {
+        "name": "Sonderniveau Heizbetrieb"
       },
       "time_since_last_service": {
         "name": "Zeit seit letzter Wartung"
