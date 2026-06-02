@@ -31,10 +31,10 @@
         "name": "Flue Gas Temperature"
       },
       "room_temperature": {
-        "name": "Room Temperature"
+        "name": "Normal Room Temp"
       },
       "mixed_external_temperature": {
-        "name": "Mixed External Temperature"
+        "name": "Setback Room Temp"
       },
       "heat_demand": {
         "name": "Heat Demand"
@@ -59,6 +59,30 @@
       },
       "burner_hours": {
         "name": "Burner Hours"
+      },
+      "burner_load": {
+        "name": "Burner Load"
+      },
+      "system_frost_protection": {
+        "name": "System Frost Protection"
+      },
+      "min_flow_temp": {
+        "name": "Min. Flow Temp Target"
+      },
+      "max_flow_temp": {
+        "name": "Max. Flow Temp Target"
+      },
+      "flow_temp_hysteresis": {
+        "name": "Flow Temp Hysteresis"
+      },
+      "burner_lockout_time": {
+        "name": "Burner Lockout Time"
+      },
+      "max_dhw_output": {
+        "name": "Max. DHW Output"
+      },
+      "max_dhw_charge_time": {
+        "name": "Max. DHW Charge Time"
       }
     },
     "binary_sensor": {

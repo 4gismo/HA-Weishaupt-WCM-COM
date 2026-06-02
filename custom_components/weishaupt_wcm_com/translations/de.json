@@ -31,10 +31,10 @@
         "name": "Abgastemperatur"
       },
       "room_temperature": {
-        "name": "Raumtemperatur"
+        "name": "Normal-Raumtemp"
       },
       "mixed_external_temperature": {
-        "name": "Gemischte Außentemperatur"
+        "name": "Absenk-Raumtemp"
       },
       "heat_demand": {
         "name": "Wärmeanforderung"
@@ -59,6 +59,30 @@
       },
       "burner_hours": {
         "name": "Brennerstunden"
+      },
+      "burner_load": {
+        "name": "Laststellung"
+      },
+      "system_frost_protection": {
+        "name": "Anlagenfrostschutz"
+      },
+      "min_flow_temp": {
+        "name": "Min. VL Soll"
+      },
+      "max_flow_temp": {
+        "name": "Max. VL Soll"
+      },
+      "flow_temp_hysteresis": {
+        "name": "Schaltdifferenz VL"
+      },
+      "burner_lockout_time": {
+        "name": "Brenner Taktsperre"
+      },
+      "max_dhw_output": {
+        "name": "Max. Leistung WW"
+      },
+      "max_dhw_charge_time": {
+        "name": "Max. Ladezeit WW"
       }
     },
     "binary_sensor": {

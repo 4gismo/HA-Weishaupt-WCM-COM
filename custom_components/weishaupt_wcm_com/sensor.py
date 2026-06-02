@@ -9,6 +9,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
+    PERCENTAGE,
     UnitOfTemperature,
     UnitOfVolume,
     UnitOfTime,
@@ -31,6 +32,14 @@ from .const import (
     TIME_SINCE_LAST_SERVICE_KEY,
     BURNER_STARTS_KEY,
     BURNER_HOURS_KEY,
+    BURNER_LOAD_KEY,
+    SYSTEM_FROST_PROTECTION_KEY,
+    MIN_FLOW_TEMP_KEY,
+    MAX_FLOW_TEMP_KEY,
+    FLOW_TEMP_HYSTERESIS_KEY,
+    BURNER_LOCKOUT_TIME_KEY,
+    MAX_DHW_OUTPUT_KEY,
+    MAX_DHW_CHARGE_TIME_KEY,
 )
 from . import WeishauptBaseEntity
 
@@ -126,6 +135,55 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         device_class=SensorDeviceClass.DURATION,
         state_class=SensorStateClass.TOTAL_INCREASING,
         native_unit_of_measurement=UnitOfTime.HOURS,
+    ),
+    BURNER_LOAD_KEY: SensorEntityDescription(
+        key=BURNER_LOAD_KEY,
+        translation_key="burner_load",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=PERCENTAGE,
+    ),
+    SYSTEM_FROST_PROTECTION_KEY: SensorEntityDescription(
+        key=SYSTEM_FROST_PROTECTION_KEY,
+        translation_key="system_frost_protection",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    MIN_FLOW_TEMP_KEY: SensorEntityDescription(
+        key=MIN_FLOW_TEMP_KEY,
+        translation_key="min_flow_temp",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    MAX_FLOW_TEMP_KEY: SensorEntityDescription(
+        key=MAX_FLOW_TEMP_KEY,
+        translation_key="max_flow_temp",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    FLOW_TEMP_HYSTERESIS_KEY: SensorEntityDescription(
+        key=FLOW_TEMP_HYSTERESIS_KEY,
+        translation_key="flow_temp_hysteresis",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    BURNER_LOCKOUT_TIME_KEY: SensorEntityDescription(
+        key=BURNER_LOCKOUT_TIME_KEY,
+        translation_key="burner_lockout_time",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
+    ),
+    MAX_DHW_OUTPUT_KEY: SensorEntityDescription(
+        key=MAX_DHW_OUTPUT_KEY,
+        translation_key="max_dhw_output",
+        native_unit_of_measurement=PERCENTAGE,
+    ),
+    MAX_DHW_CHARGE_TIME_KEY: SensorEntityDescription(
+        key=MAX_DHW_CHARGE_TIME_KEY,
+        translation_key="max_dhw_charge_time",
+        device_class=SensorDeviceClass.DURATION,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
     ),
 }
 
