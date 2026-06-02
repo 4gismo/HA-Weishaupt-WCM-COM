@@ -14,7 +14,6 @@ from .const import (
     PUMP_KEY,
     WARM_WATER_KEY,
     FLAME_KEY,
-    ERROR_KEY,
     GAS_VALVE_1_KEY,
     GAS_VALVE_2_KEY,
     HEATING_KEY,
@@ -53,11 +52,6 @@ BINARY_SENSOR_DESCRIPTIONS: dict[str, BinarySensorEntityDescription] = {
         key=WARM_WATER_KEY,
         translation_key="warm_water",
         device_class=BinarySensorDeviceClass.RUNNING,
-    ),
-    ERROR_KEY: BinarySensorEntityDescription(
-        key=ERROR_KEY,
-        translation_key="error",
-        device_class=BinarySensorDeviceClass.PROBLEM,
     ),
 }
 

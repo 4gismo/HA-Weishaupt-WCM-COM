@@ -42,6 +42,9 @@
       "operating_phase": {
         "name": "Betriebsphase"
       },
+      "error": {
+        "name": "Fehler"
+      },
       "oil_meter": {
         "name": "Ölzähler"
       },
@@ -60,25 +63,38 @@
     },
     "binary_sensor": {
       "flame": {
-        "name": "Flamme"
+        "name": "Flamme",
+        "state": {
+          "on": "Ein",
+          "off": "Aus"
+        }
       },
       "pump": {
-        "name": "Pumpe"
+        "name": "Pumpe",
+        "state": {
+          "on": "Ein",
+          "off": "Aus"
+        }
       },
       "heating": {
-        "name": "Heizung"
+        "name": "Heizung",
+        "state": {
+          "on": "Ein",
+          "off": "Aus"
+        }
       },
       "warm_water": {
-        "name": "Warmwasser"
+        "name": "Warmwasser",
+        "state": {
+          "on": "Ein",
+          "off": "Aus"
+        }
       },
       "gas_valve_1": {
         "name": "Gasventil 1"
       },
       "gas_valve_2": {
         "name": "Gasventil 2"
-      },
-      "error": {
-        "name": "Fehler"
       }
     },
     "select": {

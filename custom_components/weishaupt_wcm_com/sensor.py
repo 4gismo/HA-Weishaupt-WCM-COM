@@ -25,6 +25,7 @@ from .const import (
     MIXED_EXTERNAL_TEMPERATURE_KEY,
     ROOM_TEMPERATURE_KEY,
     OPERATING_PHASE_KEY,
+    ERROR_KEY,
     HEAT_DEMAND_KEY,
     RETURN_TEMPERATURE_KEY,
     TIME_SINCE_LAST_SERVICE_KEY,
@@ -88,6 +89,10 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
     OPERATING_PHASE_KEY: SensorEntityDescription(
         key=OPERATING_PHASE_KEY,
         translation_key="operating_phase",
+    ),
+    ERROR_KEY: SensorEntityDescription(
+        key=ERROR_KEY,
+        translation_key="error",
     ),
     HEAT_DEMAND_KEY: SensorEntityDescription(
         key=HEAT_DEMAND_KEY,

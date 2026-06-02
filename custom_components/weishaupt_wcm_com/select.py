@@ -5,6 +5,7 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import OPERATING_MODE_KEY
 from . import WeishauptBaseEntity
@@ -30,7 +31,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     async_add_entities([WeishauptOperatingModeSelect(hass, {})])
 
 
-class WeishauptOperatingModeSelect(WeishauptBaseEntity, SelectEntity):
+class WeishauptOperatingModeSelect(WeishauptBaseEntity, SelectEntity, RestoreEntity):
     _attr_has_entity_name = True
     _attr_translation_key = "operating_mode_hk"
     _attr_unique_id = "weishaupt_wcm_operating_mode"
@@ -38,13 +39,24 @@ class WeishauptOperatingModeSelect(WeishauptBaseEntity, SelectEntity):
 
     def __init__(self, hass, config):
         super().__init__(hass, config)
+        self._restored_option: str | None = None
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        last_state = await self.async_get_last_state()
+        if last_state and last_state.state in self._attr_options:
+            self._restored_option = last_state.state
+            _LOGGER.debug("Restored operating mode: %s", self._restored_option)
 
     @property
     def current_option(self) -> str | None:
         value = self.api().getData().get(OPERATING_MODE_KEY)
-        if value is None:
-            return None
-        return _VALUE_TO_OPTION.get(int(value))
+        if value is not None:
+            option = _VALUE_TO_OPTION.get(int(value))
+            if option is None:
+                _LOGGER.warning("Operating Mode value %s from device is not in known options %s", value, list(_VALUE_TO_OPTION.keys()))
+            return option
+        return self._restored_option
 
     async def async_select_option(self, option: str) -> None:
         mode_value = OPERATING_MODE_OPTIONS[option]

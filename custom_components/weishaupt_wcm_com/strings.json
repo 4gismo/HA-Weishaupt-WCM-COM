@@ -42,6 +42,9 @@
       "operating_phase": {
         "name": "Operating Phase"
       },
+      "error": {
+        "name": "Error"
+      },
       "oil_meter": {
         "name": "Oil Meter"
       },
@@ -60,25 +63,38 @@
     },
     "binary_sensor": {
       "flame": {
-        "name": "Flame"
+        "name": "Flame",
+        "state": {
+          "on": "On",
+          "off": "Off"
+        }
       },
       "pump": {
-        "name": "Pump"
+        "name": "Pump",
+        "state": {
+          "on": "On",
+          "off": "Off"
+        }
       },
       "heating": {
-        "name": "Heating"
+        "name": "Heating",
+        "state": {
+          "on": "On",
+          "off": "Off"
+        }
       },
       "warm_water": {
-        "name": "Warm Water"
+        "name": "Warm Water",
+        "state": {
+          "on": "On",
+          "off": "Off"
+        }
       },
       "gas_valve_1": {
         "name": "Gas Valve 1"
       },
       "gas_valve_2": {
         "name": "Gas Valve 2"
-      },
-      "error": {
-        "name": "Error"
       }
     },
     "select": {
