@@ -39,12 +39,26 @@
       "heat_demand": {
         "name": "Wärmeanforderung"
       },
-      "operating_mode": {
-        "name": "Betriebsmodus"
-      },
       "operating_phase": {
         "name": "Betriebsphase"
       },
+      "oil_meter": {
+        "name": "Ölzähler"
+      },
+      "return_temperature": {
+        "name": "Rücklauftemperatur"
+      },
+      "time_since_last_service": {
+        "name": "Zeit seit letzter Wartung"
+      },
+      "burner_starts": {
+        "name": "Brennerstarts"
+      },
+      "burner_hours": {
+        "name": "Brennerstunden"
+      }
+    },
+    "binary_sensor": {
       "flame": {
         "name": "Flamme"
       },
@@ -65,21 +79,21 @@
       },
       "error": {
         "name": "Fehler"
-      },
-      "oil_meter": {
-        "name": "Ölzähler"
-      },
-      "return_temperature": {
-        "name": "Rücklauftemperatur"
-      },
-      "time_since_last_service": {
-        "name": "Zeit seit letzter Wartung"
-      },
-      "burner_starts": {
-        "name": "Brennerstarts"
-      },
-      "burner_hours": {
-        "name": "Brennerstunden"
+      }
+    },
+    "select": {
+      "operating_mode_hk": {
+        "name": "Betriebsart HK",
+        "state": {
+          "standby": "Standby",
+          "normal": "Normal",
+          "setback": "Absenk",
+          "summer": "Sommer",
+          "program_1": "Programm 1",
+          "program_2": "Programm 2",
+          "program_3": "Programm 3",
+          "follow_master": "Wie Leitstelle"
+        }
       }
     },
     "switch": {

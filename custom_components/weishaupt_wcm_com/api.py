@@ -27,6 +27,21 @@ class WeishauptAPI:
     def getData(self):
         return self._data
 
+    def set_operating_mode(self, mode_value: int):
+        try:
+            heat_exchanger.set_operating_mode(self._host, self._username, self._password, mode_value)
+            self._data["Operating Mode"] = mode_value
+        except requests.exceptions.ConnectionError:
+            _LOGGER.error("WCM-COM not reachable at http://%s — cannot set operating mode", self._host)
+        except requests.exceptions.Timeout:
+            _LOGGER.error("WCM-COM at %s did not respond within 5s when setting operating mode", self._host)
+        except requests.exceptions.HTTPError as e:
+            _LOGGER.error("WCM-COM auth or HTTP error when setting operating mode: %s", e)
+        except requests.exceptions.RequestException as e:
+            _LOGGER.error("WCM-COM request failed when setting operating mode: %s", e)
+        except Exception as e:
+            _LOGGER.error("WCM-COM unexpected error when setting operating mode: %s", e)
+
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
         if self._paused:

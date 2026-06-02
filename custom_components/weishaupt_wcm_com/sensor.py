@@ -16,7 +16,6 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
 from .const import (
     OIL_CONSUMPTION_KEY,
     OUTSIDE_TEMPERATURE_KEY,
@@ -25,15 +24,7 @@ from .const import (
     FLUE_GAS_TEMPERATURE_KEY,
     MIXED_EXTERNAL_TEMPERATURE_KEY,
     ROOM_TEMPERATURE_KEY,
-    OPERATING_MODE_KEY,
     OPERATING_PHASE_KEY,
-    PUMP_KEY,
-    WARM_WATER_KEY,
-    FLAME_KEY,
-    ERROR_KEY,
-    GAS_VALVE_1_KEY,
-    GAS_VALVE_2_KEY,
-    HEATING_KEY,
     HEAT_DEMAND_KEY,
     RETURN_TEMPERATURE_KEY,
     TIME_SINCE_LAST_SERVICE_KEY,
@@ -94,41 +85,9 @@ SENSOR_DESCRIPTIONS: dict[str, SensorEntityDescription] = {
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
     ),
-    OPERATING_MODE_KEY: SensorEntityDescription(
-        key=OPERATING_MODE_KEY,
-        translation_key="operating_mode",
-    ),
     OPERATING_PHASE_KEY: SensorEntityDescription(
         key=OPERATING_PHASE_KEY,
         translation_key="operating_phase",
-    ),
-    PUMP_KEY: SensorEntityDescription(
-        key=PUMP_KEY,
-        translation_key="pump",
-    ),
-    WARM_WATER_KEY: SensorEntityDescription(
-        key=WARM_WATER_KEY,
-        translation_key="warm_water",
-    ),
-    FLAME_KEY: SensorEntityDescription(
-        key=FLAME_KEY,
-        translation_key="flame",
-    ),
-    ERROR_KEY: SensorEntityDescription(
-        key=ERROR_KEY,
-        translation_key="error",
-    ),
-    GAS_VALVE_1_KEY: SensorEntityDescription(
-        key=GAS_VALVE_1_KEY,
-        translation_key="gas_valve_1",
-    ),
-    GAS_VALVE_2_KEY: SensorEntityDescription(
-        key=GAS_VALVE_2_KEY,
-        translation_key="gas_valve_2",
-    ),
-    HEATING_KEY: SensorEntityDescription(
-        key=HEATING_KEY,
-        translation_key="heating",
     ),
     HEAT_DEMAND_KEY: SensorEntityDescription(
         key=HEAT_DEMAND_KEY,
@@ -191,16 +150,6 @@ class WeishauptSensor(WeishauptBaseEntity, SensorEntity):
     @property
     def native_value(self):
         return self.api().getData().get(self.entity_description.key)
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, "weishaupt_wcm")},
-            "name": "Weishaupt WCM-COM",
-            "manufacturer": "Weishaupt",
-            "model": "WCM-COM",
-            "configuration_url": f"http://{self.api()._host}/",
-        }
 
     async def async_update(self):
         _LOGGER.debug("[async_update] Updating sensor: %s", self.entity_description.key)

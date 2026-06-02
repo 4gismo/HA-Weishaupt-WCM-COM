@@ -4,7 +4,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
 from . import WeishauptBaseEntity
 
 
@@ -28,16 +27,6 @@ class WeishauptPauseSwitch(WeishauptBaseEntity, SwitchEntity):
     @property
     def icon(self):
         return "mdi:play-circle" if self.is_on else "mdi:pause-circle"
-
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, "weishaupt_wcm")},
-            "name": "Weishaupt WCM-COM",
-            "manufacturer": "Weishaupt",
-            "model": "WCM-COM",
-            "configuration_url": f"http://{self.api()._host}/",
-        }
 
     async def async_turn_on(self, **kwargs):
         self.api().resume()
